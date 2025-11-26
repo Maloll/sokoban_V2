@@ -192,22 +192,17 @@ void afficher_plateau(t_Plateau plateau, t_Plateau niveau, int zoom)
     char caseAffiche;
     caseAffiche = ' ';
 
-    for (int x = 0; x < TAILLE; x++)
-    { // colones
-        for (int i = 0; i < zoom; i++)
-        {
+    for (int x = 0; x < TAILLE; x++){ // colones
+        for (int i = 0; i < zoom; i++){
 
-            for (int y = 0; y < TAILLE; y++)
-            { // lignes
+            for (int y = 0; y < TAILLE; y++){ // lignes
                 char casePlateau[1], caseNiveau[1];
                 casePlateau[0] = plateau[x][y];
                 caseNiveau[0] = niveau[x][y];
-                if (casePlateau[0] == MURS[0])
-                {
+                if (casePlateau[0] == MURS[0]){
                     caseAffiche = MURS[0];
                 }
-                else if (casePlateau[0] == CAISSES[0] || casePlateau[0] == CAISSES_SUR_CIBLES[0])
-                {
+                else if (casePlateau[0] == CAISSES[0] || casePlateau[0] == CAISSES_SUR_CIBLES[0]){
                     caseAffiche = CAISSES[0];
                     plateau[x][y] = CAISSES[0];
                 }
