@@ -381,7 +381,7 @@ bool gagne(t_Plateau plateau, t_Plateau niveau)
 
 void zoomer(char touche, int *zoom)
 {
-    if (touche == PLUS)
+    if (touche == PLUS && *zoom < 3)
     {
         *zoom = *zoom + 1;
     }
