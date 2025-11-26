@@ -6,7 +6,9 @@
 #include <termios.h>
 #include <unistd.h>
 #include <fcntl.h>
+
 #define TAILLE 12
+#define NB_DEPLACEMENTS 500
 #define HAUT 'z'
 #define BAS 's'
 #define GAUCHE 'q'
@@ -16,6 +18,7 @@
 #define PLUS '+'
 #define MOINS '-'
 typedef char t_Plateau[TAILLE][TAILLE];
+typedef char t_Deplacement[NB_DEPLACEMENTS];
 
 const char SOKOBAN[1] = "@";
 const char CAISSES[1] = "$";
@@ -35,6 +38,7 @@ void deplacer(char touche, t_Plateau plateau, int x, int y, int *adrCompteur);
 void detection_sokoban(t_Plateau plateau, int *AdrX, int *AdrY);
 bool gagne(t_Plateau plateau, t_Plateau niveau);
 void zoomer(char touche, int *zoom);
+void undo(t_Plateau plateau,t_Deplacement deplacements, int *compteur);
 
 int main()
 {
@@ -384,4 +388,8 @@ void zoomer(char touche, int *zoom)
     {
         *zoom = *zoom - 1;
     }
+}
+
+void undo(t_Plateau plateau,t_Deplacement deplacements, int *compteur){
+    
 }
