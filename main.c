@@ -81,9 +81,9 @@ int main()
                 lecture_touches(&touche);
                 detection_sokoban(plateau, &sokobanX, &sokobanY);
                 deplacer(touche, plateau, sokobanX, sokobanY, &compteur,deplacements);
-                undo(plateau,deplacements,&compteur,touche,sokobanX,sokobanY);
                 zoomer(touche,&zoom);
                 system("clear");
+                undo(plateau,deplacements,&compteur,touche,sokobanX,sokobanY);
                 affiche_entete(nomNiveau, compteur);
                 afficher_plateau(plateau, niveau, zoom);
             }
@@ -409,8 +409,10 @@ void zoomer(char touche, int *zoom)
 
 void undo(t_Plateau plateau,t_Deplacement deplacements, int *adrCompteur, char touche, int x, int y){
     if(touche == UNDO){
+        printf("deplacements[%d] = %c\n",*adrCompteur,deplacements[*adrCompteur]);
         if(deplacements[*adrCompteur] == SOK_BAS){
             plateau[x - 1][y] = SOKOBAN[0];
+            *adrCompteur = *adrCompteur - 1;
         }
     }
 }
