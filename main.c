@@ -86,7 +86,7 @@ int main()
                 zoomer(touche,&zoom);
                 system("clear");
                 deplacer(touche, plateau, sokobanX, sokobanY, &compteur,deplacements);
-                printf("deplacements[%d] = %c\n",(compteur - 1),deplacements[compteur - 1]);
+                printf("deplacements[%d] = %c\n",compteur,deplacements[compteur]);
                 affiche_entete(nomNiveau, compteur);
                 afficher_plateau(plateau, niveau, zoom);
             }
@@ -275,14 +275,14 @@ void deplacer(char touche, t_Plateau plateau, int x, int y, int *adrCompteur, t_
             {
                 plateau[x - 1][y] = SOKOBAN[0];
                 plateau[x - 2][y] = CAISSES[0];
-                deplacements[*adrCompteur] = CAISSE_HAUT;
+                deplacements[*adrCompteur + 1] = CAISSE_HAUT;
             }
             else
             {
                 plateau[x - 1][y] = SOKOBAN[0];
-                deplacements[*adrCompteur] = SOK_HAUT;
+                deplacements[*adrCompteur + 1] = SOK_HAUT;
             }
-            plateau[x][y] = ' ';
+            plateau[x][y] = VIDE[0];
             *adrCompteur = *adrCompteur + 1;
         }
     }
@@ -296,14 +296,14 @@ void deplacer(char touche, t_Plateau plateau, int x, int y, int *adrCompteur, t_
             {
                 plateau[x][y - 1] = SOKOBAN[0];
                 plateau[x][y - 2] = CAISSES[0];
-                deplacements[*adrCompteur] = CAISSE_GAUCHE;
+                deplacements[*adrCompteur + 1] = CAISSE_GAUCHE;
             }
             else
             {
                 plateau[x][y - 1] = SOKOBAN[0];
-                deplacements[*adrCompteur] = SOK_GAUCHE;
+                deplacements[*adrCompteur + 1] = SOK_GAUCHE;
             }
-            plateau[x][y] = ' ';
+            plateau[x][y] = VIDE[0];
             *adrCompteur = *adrCompteur + 1;
         }
     }
@@ -317,14 +317,14 @@ void deplacer(char touche, t_Plateau plateau, int x, int y, int *adrCompteur, t_
             {
                 plateau[x + 1][y] = SOKOBAN[0];
                 plateau[x + 2][y] = CAISSES[0];
-                deplacements[*adrCompteur] = CAISSE_BAS;
+                deplacements[*adrCompteur + 1] = CAISSE_BAS;
             }
             else
             {
                 plateau[x + 1][y] = SOKOBAN[0];
-                deplacements[*adrCompteur] = SOK_BAS;
+                deplacements[*adrCompteur + 1] = SOK_BAS;
             }
-            plateau[x][y] = ' ';
+            plateau[x][y] = VIDE[0];
             *adrCompteur = *adrCompteur + 1;
         }
     }
@@ -338,14 +338,14 @@ void deplacer(char touche, t_Plateau plateau, int x, int y, int *adrCompteur, t_
             {
                 plateau[x][y + 1] = SOKOBAN[0];
                 plateau[x][y + 2] = CAISSES[0];
-                deplacements[*adrCompteur] = CAISSE_DROITE;
+                deplacements[*adrCompteur + 1] = CAISSE_DROITE;
             }
             else
             {
                 plateau[x][y + 1] = SOKOBAN[0];
-                deplacements[*adrCompteur] = SOK_DROITE;
+                deplacements[*adrCompteur + 1] = SOK_DROITE;
             }
-            plateau[x][y] = ' ';
+            plateau[x][y] = VIDE[0];
             *adrCompteur = *adrCompteur + 1;
         }
     }
@@ -413,45 +413,45 @@ void zoomer(char touche, int *zoom)
 void undo(t_Plateau plateau,t_Deplacement deplacements, int *adrCompteur, char touche, int x, int y){
     if(touche == UNDO){
         printf("deplacements[%d] = %c\n",*adrCompteur,deplacements[*adrCompteur]);
-        if(deplacements[*adrCompteur - 1] == SOK_BAS){
+        if(deplacements[*adrCompteur] == SOK_BAS){
             plateau[x - 1][y] = SOKOBAN[0];
             plateau[x][y] = VIDE[0];
             *adrCompteur = *adrCompteur - 1;
         }
-        else if(deplacements[*adrCompteur - 1] == SOK_HAUT){
+        else if(deplacements[*adrCompteur] == SOK_HAUT){
             plateau[x + 1][y] = SOKOBAN[0];
             plateau[x][y] = VIDE[0];
             *adrCompteur = *adrCompteur - 1;
         }
-        else if(deplacements[*adrCompteur - 1] == SOK_DROITE){
+        else if(deplacements[*adrCompteur] == SOK_DROITE){
             plateau[x][y - 1] = SOKOBAN[0];
             plateau[x][y] = VIDE[0];
             *adrCompteur = *adrCompteur - 1;
         }
-        else if(deplacements[*adrCompteur - 1] == SOK_GAUCHE){
+        else if(deplacements[*adrCompteur] == SOK_GAUCHE){
             plateau[x][y + 1] = SOKOBAN[0];
             plateau[x][y] = VIDE[0];
             *adrCompteur = *adrCompteur - 1;
         }
-        else if(deplacements[*adrCompteur - 1] == CAISSE_BAS){
+        else if(deplacements[*adrCompteur] == CAISSE_BAS){
             plateau[x - 1][y] = SOKOBAN[0];
             plateau[x + 1][y] = VIDE[0];
             plateau[x][y] = CAISSES[0];
             *adrCompteur = *adrCompteur - 1;
         }
-        else if(deplacements[*adrCompteur - 1] == CAISSE_HAUT){
+        else if(deplacements[*adrCompteur] == CAISSE_HAUT){
             plateau[x + 1][y] = SOKOBAN[0];
             plateau[x - 1][y] = VIDE[0];
             plateau[x][y] = CAISSES[0];
             *adrCompteur = *adrCompteur - 1;
         }
-        else if(deplacements[*adrCompteur - 1] == CAISSE_DROITE){
+        else if(deplacements[*adrCompteur] == CAISSE_DROITE){
             plateau[x][y - 1] = SOKOBAN[0];
             plateau[x][y + 1] = VIDE[0];
             plateau[x][y] = CAISSES[0];
             *adrCompteur = *adrCompteur - 1;
         }
-        else if(deplacements[*adrCompteur - 1] == CAISSE_GAUCHE){
+        else if(deplacements[*adrCompteur] == CAISSE_GAUCHE){
             plateau[x][y + 1] = SOKOBAN[0];
             plateau[x][y - 1] = VIDE[0];
             plateau[x][y] = CAISSES[0];
