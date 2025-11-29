@@ -271,10 +271,12 @@ void deplacer(char touche, t_Plateau plateau, int x, int y, int *adrCompteur, t_
             {
                 plateau[x - 1][y] = SOKOBAN[0];
                 plateau[x - 2][y] = CAISSES[0];
+                deplacements[*adrCompteur] = CAISSE_HAUT;
             }
             else
             {
                 plateau[x - 1][y] = SOKOBAN[0];
+                deplacements[*adrCompteur] = SOK_HAUT;
             }
             plateau[x][y] = ' ';
             *adrCompteur = *adrCompteur + 1;
@@ -290,10 +292,12 @@ void deplacer(char touche, t_Plateau plateau, int x, int y, int *adrCompteur, t_
             {
                 plateau[x][y - 1] = SOKOBAN[0];
                 plateau[x][y - 2] = CAISSES[0];
+                deplacements[*adrCompteur] = CAISSE_GAUCHE;
             }
             else
             {
                 plateau[x][y - 1] = SOKOBAN[0];
+                deplacements[*adrCompteur] = SOK_GAUCHE;
             }
             plateau[x][y] = ' ';
             *adrCompteur = *adrCompteur + 1;
@@ -309,10 +313,12 @@ void deplacer(char touche, t_Plateau plateau, int x, int y, int *adrCompteur, t_
             {
                 plateau[x + 1][y] = SOKOBAN[0];
                 plateau[x + 2][y] = CAISSES[0];
+                deplacements[*adrCompteur] = CAISSE_BAS;
             }
             else
             {
                 plateau[x + 1][y] = SOKOBAN[0];
+                deplacements[*adrCompteur] = SOK_BAS;
             }
             plateau[x][y] = ' ';
             *adrCompteur = *adrCompteur + 1;
@@ -328,10 +334,12 @@ void deplacer(char touche, t_Plateau plateau, int x, int y, int *adrCompteur, t_
             {
                 plateau[x][y + 1] = SOKOBAN[0];
                 plateau[x][y + 2] = CAISSES[0];
+                deplacements[*adrCompteur] = CAISSE_DROITE;
             }
             else
             {
                 plateau[x][y + 1] = SOKOBAN[0];
+                deplacements[*adrCompteur] = SOK_DROITE;
             }
             plateau[x][y] = ' ';
             *adrCompteur = *adrCompteur + 1;
