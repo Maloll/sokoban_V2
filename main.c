@@ -19,7 +19,7 @@
 #define MOINS '-'
 #define UNDO 'u'
 typedef char t_Plateau[TAILLE][TAILLE];
-typedef char t_Deplacement[NB_DEPLACEMENTS];
+typedef char t_tabDeplacement[NB_DEPLACEMENTS];
 
 const char SOKOBAN[1] = "@";
 const char CAISSES[1] = "$";
@@ -44,11 +44,11 @@ void enregistrer_partie(t_Plateau plateau, char fichier[]);
 void afficher_plateau(t_Plateau plateau, t_Plateau niveau, int zoom);
 void affiche_entete(char niveau[], int compteur);
 void lecture_touches(char *Adr_touche);
-void deplacer(char touche, t_Plateau plateau, int x, int y, int *adrCompteur, t_Deplacement deplacements);
+void deplacer(char touche, t_Plateau plateau, int x, int y, int *adrCompteur, t_tabDeplacement deplacements);
 void detection_sokoban(t_Plateau plateau, int *AdrX, int *AdrY);
 bool gagne(t_Plateau plateau, t_Plateau niveau);
 void zoomer(char touche, int *zoom);
-void undo(t_Plateau plateau,t_Deplacement deplacements, int *adrCompteur, char touche, int x, int y);
+void undo(t_Plateau plateau,t_tabDeplacement deplacements, int *adrCompteur, char touche, int x, int y);
 
 int main()
 {
@@ -57,7 +57,7 @@ int main()
     char nomNiveau[30];
     char enregistrer = 'N';
     int zoom = 1;
-    t_Deplacement deplacements;
+    t_tabDeplacement deplacements;
 
     lecture_niveau(nomNiveau);
     charger_partie(niveau, nomNiveau);
@@ -82,11 +82,10 @@ int main()
             {
                 lecture_touches(&touche);
                 detection_sokoban(plateau, &sokobanX, &sokobanY);
+                deplacer(touche, plateau, sokobanX, sokobanY, &compteur,deplacements);
                 undo(plateau,deplacements,&compteur,touche,sokobanX,sokobanY);
                 zoomer(touche,&zoom);
                 system("clear");
-                deplacer(touche, plateau, sokobanX, sokobanY, &compteur,deplacements);
-                printf("deplacements[%d] = %c\n",compteur,deplacements[compteur]);
                 affiche_entete(nomNiveau, compteur);
                 afficher_plateau(plateau, niveau, zoom);
             }
@@ -263,22 +262,16 @@ void lecture_touches(char *Adr_touche)
     *Adr_touche = getchar();
 }
 
-void deplacer(char touche, t_Plateau plateau, int x, int y, int *adrCompteur, t_Deplacement deplacements)
-{
-    if (touche == HAUT && x > 0 && plateau[x - 1][y] != MURS[0])
-    {
+void deplacer(char touche, t_Plateau plateau, int x, int y, int *adrCompteur, t_tabDeplacement deplacements){
+    if (touche == HAUT && x > 0 && plateau[x - 1][y] != MURS[0]){
         if (!(plateau[x - 1][y] == CAISSES[0] &&
-              (plateau[x - 2][y] == MURS[0] || plateau[x - 2][y] == CAISSES[0])))
-        {
-
-            if (plateau[x - 1][y] == CAISSES[0])
-            {
+              (plateau[x - 2][y] == MURS[0] || plateau[x - 2][y] == CAISSES[0]))){
+            if (plateau[x - 1][y] == CAISSES[0]){
                 plateau[x - 1][y] = SOKOBAN[0];
                 plateau[x - 2][y] = CAISSES[0];
                 deplacements[*adrCompteur + 1] = CAISSE_HAUT;
             }
-            else
-            {
+            else{
                 plateau[x - 1][y] = SOKOBAN[0];
                 deplacements[*adrCompteur + 1] = SOK_HAUT;
             }
@@ -286,20 +279,15 @@ void deplacer(char touche, t_Plateau plateau, int x, int y, int *adrCompteur, t_
             *adrCompteur = *adrCompteur + 1;
         }
     }
-    else if (touche == GAUCHE && y > 0 && plateau[x][y - 1] != MURS[0])
-    {
+    else if (touche == GAUCHE && y > 0 && plateau[x][y - 1] != MURS[0]){
         if (!(plateau[x][y - 1] == CAISSES[0] &&
-              (plateau[x][y - 2] == MURS[0] || plateau[x][y - 2] == CAISSES[0])))
-        {
-
-            if (plateau[x][y - 1] == CAISSES[0])
-            {
+              (plateau[x][y - 2] == MURS[0] || plateau[x][y - 2] == CAISSES[0]))){
+            if (plateau[x][y - 1] == CAISSES[0]){
                 plateau[x][y - 1] = SOKOBAN[0];
                 plateau[x][y - 2] = CAISSES[0];
                 deplacements[*adrCompteur + 1] = CAISSE_GAUCHE;
             }
-            else
-            {
+            else{
                 plateau[x][y - 1] = SOKOBAN[0];
                 deplacements[*adrCompteur + 1] = SOK_GAUCHE;
             }
@@ -307,20 +295,15 @@ void deplacer(char touche, t_Plateau plateau, int x, int y, int *adrCompteur, t_
             *adrCompteur = *adrCompteur + 1;
         }
     }
-    else if (touche == BAS && x < (TAILLE - 1) && plateau[x + 1][y] != MURS[0])
-    {
+    else if (touche == BAS && x < (TAILLE - 1) && plateau[x + 1][y] != MURS[0]){
         if (!(plateau[x + 1][y] == CAISSES[0] &&
-              (plateau[x + 2][y] == MURS[0] || plateau[x + 2][y] == CAISSES[0])))
-        {
-
-            if (plateau[x + 1][y] == CAISSES[0])
-            {
+              (plateau[x + 2][y] == MURS[0] || plateau[x + 2][y] == CAISSES[0]))){
+            if (plateau[x + 1][y] == CAISSES[0]){
                 plateau[x + 1][y] = SOKOBAN[0];
                 plateau[x + 2][y] = CAISSES[0];
                 deplacements[*adrCompteur + 1] = CAISSE_BAS;
             }
-            else
-            {
+            else{
                 plateau[x + 1][y] = SOKOBAN[0];
                 deplacements[*adrCompteur + 1] = SOK_BAS;
             }
@@ -328,20 +311,15 @@ void deplacer(char touche, t_Plateau plateau, int x, int y, int *adrCompteur, t_
             *adrCompteur = *adrCompteur + 1;
         }
     }
-    else if (touche == DROITE && y < (TAILLE - 1) && plateau[x][y + 1] != MURS[0])
-    {
+    else if (touche == DROITE && y < (TAILLE - 1) && plateau[x][y + 1] != MURS[0]){
         if (!(plateau[x][y + 1] == CAISSES[0] &&
-              (plateau[x][y + 2] == MURS[0] || plateau[x][y + 2] == CAISSES[0])))
-        {
-
-            if (plateau[x][y + 1] == CAISSES[0])
-            {
+              (plateau[x][y + 2] == MURS[0] || plateau[x][y + 2] == CAISSES[0]))){
+            if (plateau[x][y + 1] == CAISSES[0]){
                 plateau[x][y + 1] = SOKOBAN[0];
                 plateau[x][y + 2] = CAISSES[0];
                 deplacements[*adrCompteur + 1] = CAISSE_DROITE;
             }
-            else
-            {
+            else{
                 plateau[x][y + 1] = SOKOBAN[0];
                 deplacements[*adrCompteur + 1] = SOK_DROITE;
             }
@@ -410,7 +388,7 @@ void zoomer(char touche, int *zoom)
     }
 }
 
-void undo(t_Plateau plateau,t_Deplacement deplacements, int *adrCompteur, char touche, int x, int y){
+void undo(t_Plateau plateau,t_tabDeplacement deplacements, int *adrCompteur, char touche, int x, int y){
     if(touche == UNDO){
         printf("deplacements[%d] = %c\n",*adrCompteur,deplacements[*adrCompteur]);
         if(deplacements[*adrCompteur] == SOK_BAS){
@@ -459,3 +437,7 @@ void undo(t_Plateau plateau,t_Deplacement deplacements, int *adrCompteur, char t
         }
     }
 }
+
+
+// enregistrer fichiers deplacements
+// commente
