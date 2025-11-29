@@ -17,6 +17,7 @@
 #define ABANDON 'x'
 #define PLUS '+'
 #define MOINS '-'
+#define UNDO 'u'
 typedef char t_Plateau[TAILLE][TAILLE];
 typedef char t_Deplacement[NB_DEPLACEMENTS];
 
@@ -240,7 +241,7 @@ void affiche_entete(char niveau[], int compteur)
 {
     printf("SOKOBAN niveau : %s\n\ntouches de depalcements :\n%c (haut)", niveau, HAUT);
     printf(" %c (gauche)\n%c (bas)  %c (droite)\n\n", GAUCHE, BAS, DROITE);
-    printf("Autre : %c (abandon) %c (recommencer)\n\n", ABANDON, RECOMMENCER);
+    printf("Autre : %c (abandon) %c (recommencer) %c (zoom +) %c (zoom -) %c (undo)\n\n", ABANDON, RECOMMENCER, PLUS, MOINS, UNDO);
     printf("Nombre de deplacements : %d \n\n\n", compteur);
 }
 
