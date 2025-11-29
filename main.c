@@ -27,6 +27,14 @@ const char CIBLES[1] = ".";
 const char MURS[1] = "#";
 const char CAISSES_SUR_CIBLES[1] = "*";
 const char SOKOBAN_SUR_CIBLE[1] = "+";
+const char SOK_GAUCHE = 'g';
+const char CAISSE_GAUCHE = 'G';
+const char SOK_DROITE = 'd';
+const char CAISSE_DROITE = 'D';
+const char SOK_HAUT = 'h';
+const char CAISSE_HAUT = 'H';
+const char SOK_BAS = 'b';
+const char CAISSE_BAS = 'B';
 
 void lecture_niveau(char niveau[]);
 int kbhit();
