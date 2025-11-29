@@ -25,6 +25,7 @@ const char SOKOBAN[1] = "@";
 const char CAISSES[1] = "$";
 const char CIBLES[1] = ".";
 const char MURS[1] = "#";
+const char VIDE[1] = " ";
 const char CAISSES_SUR_CIBLES[1] = "*";
 const char SOKOBAN_SUR_CIBLE[1] = "+";
 const char SOK_GAUCHE = 'g';
@@ -414,6 +415,46 @@ void undo(t_Plateau plateau,t_Deplacement deplacements, int *adrCompteur, char t
         printf("deplacements[%d] = %c\n",*adrCompteur,deplacements[*adrCompteur]);
         if(deplacements[*adrCompteur - 1] == SOK_BAS){
             plateau[x - 1][y] = SOKOBAN[0];
+            plateau[x][y] = VIDE[0];
+            *adrCompteur = *adrCompteur - 1;
+        }
+        else if(deplacements[*adrCompteur - 1] == SOK_HAUT){
+            plateau[x + 1][y] = SOKOBAN[0];
+            plateau[x][y] = VIDE[0];
+            *adrCompteur = *adrCompteur - 1;
+        }
+        else if(deplacements[*adrCompteur - 1] == SOK_DROITE){
+            plateau[x][y - 1] = SOKOBAN[0];
+            plateau[x][y] = VIDE[0];
+            *adrCompteur = *adrCompteur - 1;
+        }
+        else if(deplacements[*adrCompteur - 1] == SOK_GAUCHE){
+            plateau[x][y + 1] = SOKOBAN[0];
+            plateau[x][y] = VIDE[0];
+            *adrCompteur = *adrCompteur - 1;
+        }
+        else if(deplacements[*adrCompteur - 1] == CAISSE_BAS){
+            plateau[x - 1][y] = SOKOBAN[0];
+            plateau[x + 1][y] = VIDE[0];
+            plateau[x][y] = CAISSES[0];
+            *adrCompteur = *adrCompteur - 1;
+        }
+        else if(deplacements[*adrCompteur - 1] == CAISSE_HAUT){
+            plateau[x + 1][y] = SOKOBAN[0];
+            plateau[x - 1][y] = VIDE[0];
+            plateau[x][y] = CAISSES[0];
+            *adrCompteur = *adrCompteur - 1;
+        }
+        else if(deplacements[*adrCompteur - 1] == CAISSE_DROITE){
+            plateau[x][y - 1] = SOKOBAN[0];
+            plateau[x][y + 1] = VIDE[0];
+            plateau[x][y] = CAISSES[0];
+            *adrCompteur = *adrCompteur - 1;
+        }
+        else if(deplacements[*adrCompteur - 1] == CAISSE_GAUCHE){
+            plateau[x][y + 1] = SOKOBAN[0];
+            plateau[x][y - 1] = VIDE[0];
+            plateau[x][y] = CAISSES[0];
             *adrCompteur = *adrCompteur - 1;
         }
     }
