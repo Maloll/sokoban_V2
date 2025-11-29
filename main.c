@@ -47,7 +47,7 @@ void deplacer(char touche, t_Plateau plateau, int x, int y, int *adrCompteur, t_
 void detection_sokoban(t_Plateau plateau, int *AdrX, int *AdrY);
 bool gagne(t_Plateau plateau, t_Plateau niveau);
 void zoomer(char touche, int *zoom);
-void undo(t_Plateau plateau,t_Deplacement deplacements, int *compteur);
+void undo(t_Plateau plateau,t_Deplacement deplacements, int *compteur, char touche);
 
 int main()
 {
@@ -250,7 +250,7 @@ void affiche_entete(char niveau[], int compteur)
 {
     printf("SOKOBAN niveau : %s\n\ntouches de depalcements :\n%c (haut)", niveau, HAUT);
     printf(" %c (gauche)\n%c (bas)  %c (droite)\n\n", GAUCHE, BAS, DROITE);
-    printf("Autre : %c (abandon) %c (recommencer) %c (zoom +) %c (zoom -) %c (undo)\n\n", ABANDON, RECOMMENCER, PLUS, MOINS, UNDO);
+    printf("Autre : %c (abandon) | %c (recommencer) | %c (zoom +) | %c (zoom -) | %c (undo) |\n\n", ABANDON, RECOMMENCER, PLUS, MOINS, UNDO);
     printf("Nombre de deplacements : %d \n\n\n", compteur);
 }
 
@@ -408,6 +408,8 @@ void zoomer(char touche, int *zoom)
     }
 }
 
-void undo(t_Plateau plateau,t_Deplacement deplacements, int *compteur){
-    
+void undo(t_Plateau plateau,t_Deplacement deplacements, int *compteur, char touche){
+    if(touche == UNDO){
+        
+    }
 }
