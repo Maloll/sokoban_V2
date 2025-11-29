@@ -47,7 +47,7 @@ void deplacer(char touche, t_Plateau plateau, int x, int y, int *adrCompteur, t_
 void detection_sokoban(t_Plateau plateau, int *AdrX, int *AdrY);
 bool gagne(t_Plateau plateau, t_Plateau niveau);
 void zoomer(char touche, int *zoom);
-void undo(t_Plateau plateau,t_Deplacement deplacements, int *compteur, char touche);
+void undo(t_Plateau plateau,t_Deplacement deplacements, int *adrCompteur, char touche, int x, int y);
 
 int main()
 {
@@ -81,6 +81,7 @@ int main()
                 lecture_touches(&touche);
                 detection_sokoban(plateau, &sokobanX, &sokobanY);
                 deplacer(touche, plateau, sokobanX, sokobanY, &compteur,deplacements);
+                undo(plateau,deplacements,&compteur,touche,sokobanX,sokobanY);
                 zoomer(touche,&zoom);
                 system("clear");
                 affiche_entete(nomNiveau, compteur);
@@ -398,18 +399,18 @@ bool gagne(t_Plateau plateau, t_Plateau niveau)
 
 void zoomer(char touche, int *zoom)
 {
-    if (touche == PLUS && *zoom < 3)
-    {
+    if (touche == PLUS && *zoom < 3){
         *zoom = *zoom + 1;
     }
-    else if (touche == MOINS && *zoom > 1)
-    {
+    else if (touche == MOINS && *zoom > 1){
         *zoom = *zoom - 1;
     }
 }
 
-void undo(t_Plateau plateau,t_Deplacement deplacements, int *compteur, char touche){
+void undo(t_Plateau plateau,t_Deplacement deplacements, int *adrCompteur, char touche, int x, int y){
     if(touche == UNDO){
-        
+        if(deplacements[*adrCompteur] == SOK_BAS){
+            plateau[x - 1][y] = SOKOBAN[0];
+        }
     }
 }
