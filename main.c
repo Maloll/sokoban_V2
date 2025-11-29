@@ -207,7 +207,7 @@ void enregistrer_partie(t_Plateau plateau, char fichier[])
 void afficher_plateau(t_Plateau plateau, t_Plateau niveau, int zoom)
 {
     char caseAffiche;
-    caseAffiche = ' ';
+    caseAffiche = VIDE[0];
 
     for (int x = 0; x < TAILLE; x++){ // colones
         for (int i = 0; i < zoom; i++){
@@ -237,7 +237,7 @@ void afficher_plateau(t_Plateau plateau, t_Plateau niveau, int zoom)
                 }
                 else
                 {
-                    caseAffiche = ' ';
+                    caseAffiche = VIDE[0];
                 }
                 for (int k = 0; k < zoom; k++)
                 {
