@@ -253,7 +253,7 @@ void afficher_plateau(t_Plateau plateau, t_Plateau niveau, int zoom){
 void affiche_entete(char niveau[], int compteur){
     printf("SOKOBAN niveau : %s\n\ntouches de depalcements :\n%c (haut)", niveau, HAUT);
     printf(" %c (gauche)\n%c (bas)  %c (droite)\n\n", GAUCHE, BAS, DROITE);
-    printf("Autre : %c (abandon) | %c (recommencer) | %c (zoom +) | %c (zoom -) | %c (undo) |\n\n", ABANDON, RECOMMENCER, PLUS, MOINS, UNDO);
+    printf("Autre : %c (abandon) | %c (recommencer) | %c (zoom plus) | %c (zoom moins) | %c (undo) |\n\n", ABANDON, RECOMMENCER, PLUS, MOINS, UNDO);
     printf("Nombre de deplacements : %d \n\n\n", compteur);
 }
 
