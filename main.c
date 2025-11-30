@@ -9,6 +9,8 @@
 
 #define TAILLE 12
 #define NB_DEPLACEMENTS 500
+
+// definition des touches
 #define HAUT 'z'
 #define BAS 's'
 #define GAUCHE 'q'
@@ -21,6 +23,7 @@
 typedef char t_Plateau[TAILLE][TAILLE];
 typedef char t_tabDeplacement[NB_DEPLACEMENTS];
 
+// definition des char a enregistrer / afficher
 const char SOKOBAN[1] = "@";
 const char CAISSES[1] = "$";
 const char CIBLES[1] = ".";
@@ -37,6 +40,7 @@ const char CAISSE_HAUT = 'H';
 const char SOK_BAS = 'b';
 const char CAISSE_BAS = 'B';
 
+// prototypes de toutes les fonctions / procedures
 void lecture_niveau(char niveau[]);
 int kbhit();
 void charger_partie(t_Plateau plateau, char fichier[]);
@@ -51,36 +55,36 @@ void zoomer(char touche, int *zoom);
 void undo(t_Plateau plateau,t_tabDeplacement deplacements, int *adrCompteur, char touche, int x, int y);
 void enregistrer_deplacements(t_tabDeplacement t, int nb, char fic[]);
 
-int main()
-{
+
+int main(){
+    //declaration des variables
     bool recommencer = true, victoire = false;
     t_Plateau plateau, niveau;
     char nomNiveau[30];
     char enregistrer = 'N', enregistrerDep = 'N';
     int zoom = 1, compteur;
+    int sokobanX, sokobanY;
     t_tabDeplacement deplacements;
-
+    char touche, verifRecommencer;
     lecture_niveau(nomNiveau);
     charger_partie(niveau, nomNiveau);
 
-    while (recommencer && victoire == false)
-    {
-
-        int sokobanX, sokobanY;
-        char touche = '\0', verifRecommencer = '\0';
+    while (recommencer && victoire == false){ // jouer les parties en boucle tant que l'utilisateur n'a pas abandonner / gagner
+        // remise a 0
+        touche = '\0';
+        verifRecommencer = '\0';
         compteur = 0;        
 
+        // initialisation
         charger_partie(plateau, nomNiveau);
         system("clear");
         affiche_entete(nomNiveau, compteur);
         afficher_plateau(plateau, niveau, zoom);
 
-        while (touche != ABANDON && victoire == false)
-        {
-            usleep(60000);
+        while (touche != ABANDON && victoire == false){ // boucle d'affichage + deplacements + undo, tant que pas de victorie ou d'abandon
+            usleep(60000); // delay pour ne pas prendre trop de ressources
             victoire = gagne(plateau, niveau);
-            if (kbhit())
-            {
+            if (kbhit()){ // si touche appuyé
                 lecture_touches(&touche);
                 detection_sokoban(plateau, &sokobanX, &sokobanY);
                 deplacer(touche, plateau, sokobanX, sokobanY, &compteur,deplacements);
@@ -91,24 +95,20 @@ int main()
                 afficher_plateau(plateau, niveau, zoom);
             }
 
-            if (touche == RECOMMENCER)
-            {
+            if (touche == RECOMMENCER){ // verification pour recommencer
                 printf("Etes vous sur de vouloir recommencer [Y/N] ? ");
                 scanf("%c", &verifRecommencer);
 
-                if (verifRecommencer == 'Y')
-                {
+                if (verifRecommencer == 'Y'){
                     break;
                 }
             }
-            if (touche == ABANDON)
-            {
+            if (touche == ABANDON){ // verification abandon + enregistrer
                 recommencer = false;
                 printf("Voulez vous enregistrer votre partie [Y/N] ? ");
                 scanf("%c", &enregistrer);
 
-                if (enregistrer == 'Y')
-                {
+                if (enregistrer == 'Y'){
                     char nomFichier[30];
                     printf("nom du fichier : ");
                     scanf(" %s", nomFichier);
@@ -117,8 +117,7 @@ int main()
                 printf("Voulez vous enregistrer vos deplacements [Y/N] ? ");
                 scanf(" %c", &enregistrerDep);
 
-                if (enregistrerDep == 'Y')
-                {
+                if (enregistrerDep == 'Y'){
                     char nomFichierDep[30];
                     printf("nom du fichier (a la fin ajoutez \".dep\"): ");
                     scanf("%s", nomFichierDep);
@@ -128,13 +127,11 @@ int main()
             }
         }
     }
-    if (victoire == true)
-    {
+    if (victoire == true){ // victoire + enregistrer
         printf("Bravo !!! passez au niveau suivant !\n");
         printf("Voulez vous enregistrer vos deplacements [Y/N] ? ");
         scanf(" %c", &enregistrerDep);
-        if (enregistrerDep == 'Y')
-        {
+        if (enregistrerDep == 'Y'){
             char nomFichierDep[30];
             printf("nom du fichier (a la fin ajoutez \".dep\"): ");
             scanf("%s", nomFichierDep);
@@ -144,14 +141,12 @@ int main()
     return EXIT_SUCCESS;
 }
 
-void lecture_niveau(char niveau[])
-{
+void lecture_niveau(char niveau[]){
     printf("nom du fichier .sok : ");
     scanf("%s", niveau);
 }
 
-int kbhit()
-{
+int kbhit(){
     // la fonction retourne :
     // 1 si un caractere est present
     // 0 si pas de caractere présent
@@ -174,31 +169,25 @@ int kbhit()
     tcsetattr(STDIN_FILENO, TCSANOW, &oldt);
     fcntl(STDIN_FILENO, F_SETFL, oldf);
 
-    if (ch != EOF)
-    {
+    if (ch != EOF){
         ungetc(ch, stdin);
         unCaractere = 1;
     }
     return unCaractere;
 }
 
-void charger_partie(t_Plateau plateau, char fichier[])
-{
+void charger_partie(t_Plateau plateau, char fichier[]){
     FILE *f;
     char finDeLigne;
 
     f = fopen(fichier, "r");
-    if (f == NULL)
-    {
+    if (f == NULL){
         printf("ERREUR SUR FICHIER");
         exit(EXIT_FAILURE);
     }
-    else
-    {
-        for (int ligne = 0; ligne < TAILLE; ligne++)
-        {
-            for (int colonne = 0; colonne < TAILLE; colonne++)
-            {
+    else{
+        for (int ligne = 0; ligne < TAILLE; ligne++){
+            for (int colonne = 0; colonne < TAILLE; colonne++){
                 fread(&plateau[ligne][colonne], sizeof(char), 1, f);
             }
             fread(&finDeLigne, sizeof(char), 1, f);
@@ -207,16 +196,13 @@ void charger_partie(t_Plateau plateau, char fichier[])
     }
 }
 
-void enregistrer_partie(t_Plateau plateau, char fichier[])
-{
+void enregistrer_partie(t_Plateau plateau, char fichier[]){
     FILE *f;
     char finDeLigne = '\n';
 
     f = fopen(fichier, "w");
-    for (int ligne = 0; ligne < TAILLE; ligne++)
-    {
-        for (int colonne = 0; colonne < TAILLE; colonne++)
-        {
+    for (int ligne = 0; ligne < TAILLE; ligne++){
+        for (int colonne = 0; colonne < TAILLE; colonne++){
             fwrite(&plateau[ligne][colonne], sizeof(char), 1, f);
         }
         fwrite(&finDeLigne, sizeof(char), 1, f);
@@ -224,15 +210,13 @@ void enregistrer_partie(t_Plateau plateau, char fichier[])
     fclose(f);
 }
 
-void afficher_plateau(t_Plateau plateau, t_Plateau niveau, int zoom)
-{
+void afficher_plateau(t_Plateau plateau, t_Plateau niveau, int zoom){
     char caseAffiche;
     caseAffiche = VIDE[0];
 
-    for (int x = 0; x < TAILLE; x++){ // colones
-        for (int i = 0; i < zoom; i++){
-
-            for (int y = 0; y < TAILLE; y++){ // lignes
+    for (int x = 0; x < TAILLE; x++){
+        for (int i = 0; i < zoom; i++){ // affiche plusieurs fois les lignes en fonction du zoom
+            for (int y = 0; y < TAILLE; y++){
                 char casePlateau[1], caseNiveau[1];
                 casePlateau[0] = plateau[x][y];
                 caseNiveau[0] = niveau[x][y];
@@ -249,18 +233,15 @@ void afficher_plateau(t_Plateau plateau, t_Plateau niveau, int zoom)
                 }
                 else if (caseNiveau[0] == CIBLES[0] || caseNiveau[0] == CAISSES_SUR_CIBLES[0] || caseNiveau[0] == SOKOBAN_SUR_CIBLE[0])
                 {
-                    if (casePlateau[0] != SOKOBAN[0] && casePlateau[0] != CAISSES[0])
-                    {
+                    if (casePlateau[0] != SOKOBAN[0] && casePlateau[0] != CAISSES[0]){
                         caseAffiche = CIBLES[0];
                         plateau[x][y] = CIBLES[0];
                     }
                 }
-                else
-                {
+                else{
                     caseAffiche = VIDE[0];
                 }
-                for (int k = 0; k < zoom; k++)
-                {
+                for (int k = 0; k < zoom; k++){ // affiche les colones plusieurs fois en fonction du zoom
                     printf("%c", caseAffiche);
                 }
             }
@@ -269,16 +250,14 @@ void afficher_plateau(t_Plateau plateau, t_Plateau niveau, int zoom)
     }
 }
 
-void affiche_entete(char niveau[], int compteur)
-{
+void affiche_entete(char niveau[], int compteur){
     printf("SOKOBAN niveau : %s\n\ntouches de depalcements :\n%c (haut)", niveau, HAUT);
     printf(" %c (gauche)\n%c (bas)  %c (droite)\n\n", GAUCHE, BAS, DROITE);
     printf("Autre : %c (abandon) | %c (recommencer) | %c (zoom +) | %c (zoom -) | %c (undo) |\n\n", ABANDON, RECOMMENCER, PLUS, MOINS, UNDO);
     printf("Nombre de deplacements : %d \n\n\n", compteur);
 }
 
-void lecture_touches(char *Adr_touche)
-{
+void lecture_touches(char *Adr_touche){
     *Adr_touche = getchar();
 }
 
@@ -349,47 +328,35 @@ void deplacer(char touche, t_Plateau plateau, int x, int y, int *adrCompteur, t_
     }
 }
 
-void detection_sokoban(t_Plateau plateau, int *AdrX, int *AdrY)
-{
+void detection_sokoban(t_Plateau plateau, int *AdrX, int *AdrY){
     int x, y;
     bool trouve = false;
-    for (x = 0; x < TAILLE; x++)
-    {
-        for (y = 0; y < TAILLE; y++)
-        {
-            if (plateau[x][y] == SOKOBAN[0] || plateau[x][y] == SOKOBAN_SUR_CIBLE[0])
-            {
+    for (x = 0; x < TAILLE; x++){
+        for (y = 0; y < TAILLE; y++){
+            if (plateau[x][y] == SOKOBAN[0] || plateau[x][y] == SOKOBAN_SUR_CIBLE[0]){
                 trouve = true;
                 break;
             }
         }
-        if (trouve)
-        {
+        if (trouve){
             break;
         }
     }
-    if (trouve)
-    {
+    if (trouve){
         *AdrX = x;
         *AdrY = y;
     }
-    else
-    {
+    else{
         printf("sokoban introuvable\n");
     }
 }
 
-bool gagne(t_Plateau plateau, t_Plateau niveau)
-{
+bool gagne(t_Plateau plateau, t_Plateau niveau){
     bool victoire = true;
-    for (int x = 0; x < TAILLE; x++)
-    {
-        for (int y = 0; y < TAILLE; y++)
-        {
-            if ((niveau[x][y] == CIBLES[0] || niveau[x][y] == SOKOBAN_SUR_CIBLE[0]) || niveau[x][y] == CAISSES_SUR_CIBLES[0])
-            {
-                if (plateau[x][y] != CAISSES[0])
-                {
+    for (int x = 0; x < TAILLE; x++){
+        for (int y = 0; y < TAILLE; y++){
+            if ((niveau[x][y] == CIBLES[0] || niveau[x][y] == SOKOBAN_SUR_CIBLE[0]) || niveau[x][y] == CAISSES_SUR_CIBLES[0]){
+                if (plateau[x][y] != CAISSES[0]){
                     victoire = false;
                 }
             }
@@ -398,8 +365,7 @@ bool gagne(t_Plateau plateau, t_Plateau niveau)
     return victoire;
 }
 
-void zoomer(char touche, int *zoom)
-{
+void zoomer(char touche, int *zoom){
     if (touche == PLUS && *zoom < 3){
         *zoom = *zoom + 1;
     }
@@ -410,13 +376,12 @@ void zoomer(char touche, int *zoom)
 
 void undo(t_Plateau plateau,t_tabDeplacement deplacements, int *adrCompteur, char touche, int x, int y){
     if(touche == UNDO){
-        printf("deplacements[%d] = %c\n",*adrCompteur,deplacements[*adrCompteur]);
-        if(deplacements[*adrCompteur] == SOK_BAS){
-            plateau[x - 1][y] = SOKOBAN[0];
-            plateau[x][y] = VIDE[0];
-            *adrCompteur = *adrCompteur - 1;
+        if(deplacements[*adrCompteur] == SOK_BAS){ // si le dernier deplacement enregistrer est sokoban seul vers le bas alors
+            plateau[x - 1][y] = SOKOBAN[0]; // remonter sokoban de 1
+            plateau[x][y] = VIDE[0]; // rendre la case ou il était présent vide
+            *adrCompteur = *adrCompteur - 1; // reduire le compteur de mouvements de 1
         }
-        else if(deplacements[*adrCompteur] == SOK_HAUT){
+        else if(deplacements[*adrCompteur] == SOK_HAUT){ 
             plateau[x + 1][y] = SOKOBAN[0];
             plateau[x][y] = VIDE[0];
             *adrCompteur = *adrCompteur - 1;
@@ -431,10 +396,10 @@ void undo(t_Plateau plateau,t_tabDeplacement deplacements, int *adrCompteur, cha
             plateau[x][y] = VIDE[0];
             *adrCompteur = *adrCompteur - 1;
         }
-        else if(deplacements[*adrCompteur] == CAISSE_BAS){
-            plateau[x - 1][y] = SOKOBAN[0];
-            plateau[x + 1][y] = VIDE[0];
-            plateau[x][y] = CAISSES[0];
+        else if(deplacements[*adrCompteur] == CAISSE_BAS){ // si le dernier deplacement enregistrer est sokoban avec une caisse vers le bas alors
+            plateau[x - 1][y] = SOKOBAN[0]; // remonter sokoban de 1
+            plateau[x + 1][y] = VIDE[0]; // rendre la position de la caisse vide
+            plateau[x][y] = CAISSES[0]; // mettre la caisse a l'emplacement de sokoban
             *adrCompteur = *adrCompteur - 1;
         }
         else if(deplacements[*adrCompteur] == CAISSE_HAUT){
@@ -465,7 +430,3 @@ void enregistrer_deplacements(t_tabDeplacement t, int nb, char fic[]){
     fwrite(t,sizeof(char), nb, f);
     fclose(f);
 }
-
-
-// enregistrer fichiers deplacements
-// commente
