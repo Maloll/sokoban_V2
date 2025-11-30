@@ -20,6 +20,7 @@
 #define PLUS '+'
 #define MOINS '-'
 #define UNDO 'u'
+
 typedef char t_Plateau[TAILLE][TAILLE];
 typedef char t_tabDeplacement[NB_DEPLACEMENTS];
 
