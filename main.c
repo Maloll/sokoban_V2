@@ -49,14 +49,15 @@ void detection_sokoban(t_Plateau plateau, int *AdrX, int *AdrY);
 bool gagne(t_Plateau plateau, t_Plateau niveau);
 void zoomer(char touche, int *zoom);
 void undo(t_Plateau plateau,t_tabDeplacement deplacements, int *adrCompteur, char touche, int x, int y);
+void enregistrer_deplacements(t_tabDeplacement t, int nb, char fic[]);
 
 int main()
 {
     bool recommencer = true, victoire = false;
     t_Plateau plateau, niveau;
     char nomNiveau[30];
-    char enregistrer = 'N';
-    int zoom = 1;
+    char enregistrer = 'N', enregistrerDep = 'N';
+    int zoom = 1, compteur;
     t_tabDeplacement deplacements;
 
     lecture_niveau(nomNiveau);
@@ -65,9 +66,9 @@ int main()
     while (recommencer && victoire == false)
     {
 
-        int sokobanX, sokobanY, compteur = 0;
+        int sokobanX, sokobanY;
         char touche = '\0', verifRecommencer = '\0';
-        
+        compteur = 0;        
 
         charger_partie(plateau, nomNiveau);
         system("clear");
@@ -110,8 +111,18 @@ int main()
                 {
                     char nomFichier[30];
                     printf("nom du fichier : ");
-                    scanf("%s", nomFichier);
+                    scanf(" %s", nomFichier);
                     enregistrer_partie(plateau, nomFichier);
+                }
+                printf("Voulez vous enregistrer vos deplacements [Y/N] ? ");
+                scanf(" %c", &enregistrerDep);
+
+                if (enregistrerDep == 'Y')
+                {
+                    char nomFichierDep[30];
+                    printf("nom du fichier (a la fin ajoutez \".dep\"): ");
+                    scanf("%s", nomFichierDep);
+                    enregistrer_deplacements(deplacements, compteur, nomFichierDep);
                 }
                 printf("Au revoir...\n");
             }
@@ -120,6 +131,15 @@ int main()
     if (victoire == true)
     {
         printf("Bravo !!! passez au niveau suivant !\n");
+        printf("Voulez vous enregistrer vos deplacements [Y/N] ? ");
+        scanf(" %c", &enregistrerDep);
+        if (enregistrerDep == 'Y')
+        {
+            char nomFichierDep[30];
+            printf("nom du fichier (a la fin ajoutez \".dep\"): ");
+            scanf("%s", nomFichierDep);
+            enregistrer_deplacements(deplacements, compteur, nomFichierDep);
+        }
     }
     return EXIT_SUCCESS;
 }
@@ -436,6 +456,14 @@ void undo(t_Plateau plateau,t_tabDeplacement deplacements, int *adrCompteur, cha
             *adrCompteur = *adrCompteur - 1;
         }
     }
+}
+
+void enregistrer_deplacements(t_tabDeplacement t, int nb, char fic[]){
+    FILE * f;
+
+    f = fopen(fic, "w");
+    fwrite(t,sizeof(char), nb, f);
+    fclose(f);
 }
 
 
